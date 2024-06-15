@@ -2,18 +2,21 @@ from tokenizers import Tokenizer, models, pre_tokenizers, trainers
 from datasets import load_dataset
 import os
 from tqdm import tqdm
+import argparse
 
-data_name = "xsum"
+argparser = argparse.ArgumentParser()
+argparser.add_argument("--data_name", type=str, default="xsum")
+args = argparser.parse_args()
 
 DATA_INFO = {
     "cnn_dailymail": {"data_path":"abisee/cnn_dailymail","subset":"3.0.0","src_lang":"article", "tgt_lang":"highlights"},
     "xsum": {"data_path":"EdinburghNLP/xsum","subset":None,"src_lang":"document", "tgt_lang":"summary"},
 }
 
-data_path = DATA_INFO[data_name]["data_path"]
-subset = DATA_INFO[data_name]["subset"]
-src_lang = DATA_INFO[data_name]["src_lang"]
-tgt_lang = DATA_INFO[data_name]["tgt_lang"]
+data_path = DATA_INFO[args.data_name]["data_path"]
+subset = DATA_INFO[args.data_name]["subset"]
+src_lang = DATA_INFO[args.data_name]["src_lang"]
+tgt_lang = DATA_INFO[args.data_name]["tgt_lang"]
 
 def to_list_casting(data):
     data[src_lang] = dataset["train"][src_lang]
@@ -43,7 +46,7 @@ tokenizer.pre_tokenizer = pre_tokenizers.ByteLevel(add_prefix_space=False)
 trainer = trainers.BpeTrainer(vocab_size=30000, min_frequency=2, special_tokens=["<unk>", "<s>", "</s>", "<pad>"], show_progress=True)
 
 tokenizer.train_from_iterator(data, trainer=trainer)
-data_called = data_name.split("/")[-1]
+data_called = args.data_name.split("/")[-1]
 os.makedirs("tokenizer", exist_ok=True)
 # Save the trained tokenizer
 tokenizer.save(f"tokenizer/{data_called}_{subset}_BPEtokenizer.json")

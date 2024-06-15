@@ -1762,6 +1762,7 @@ class MixcoderDecoder(MixcoderPreTrainedModel):
         hidden_states = self.layernorm_embedding(hidden_states)
         hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
 
+        #code for proposed methods
         next_token_hidden_state = next_token_hidden_embeds + next_token_positions
         next_token_hidden_state = self.layernorm_embedding(next_token_hidden_state)
         next_token_hidden_state = nn.functional.dropout(next_token_hidden_state, p=self.dropout, training=self.training)

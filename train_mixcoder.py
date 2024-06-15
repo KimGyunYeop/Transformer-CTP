@@ -42,7 +42,6 @@ argparser.add_argument("--subset", type=str, default="de-en")
 argparser.add_argument("--src_lang", type=str, default="en")
 argparser.add_argument("--tgt_lang", type=str, default="de")
 argparser.add_argument("--batch_size", type=int, default=16)
-argparser.add_argument("--tokenizer_path", type=str, default="tokenizer/wmt14_de-en_BPEtokenizer.json")
 argparser.add_argument("--gpu", type=int, default=0)
 argparser.add_argument("--learning_rate", type=float, default=5e-5)
 argparser.add_argument("--weight_decay", type=float, default=0.01)
@@ -98,7 +97,7 @@ if args.setting is not None:
 data_name = args.data_name
 subset = args.subset
 batch_size = args.batch_size
-tokenizer_path = args.tokenizer_path
+tokenizer_path = f"tokenizer/{args.data_name}_{args.subset}_BPEtokenizer.json"
 gpu = args.gpu
 device = "cuda:"+str(gpu)
 learning_rate = args.learning_rate
